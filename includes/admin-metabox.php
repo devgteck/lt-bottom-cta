@@ -63,6 +63,12 @@ final class LT_Bottom_CTA_Admin {
 				'sanitize' => 'url',
 			],
 			[
+				'id'       => 'lt_mb_bottom_cta_show_icon',
+				'label'    => __( 'Exibir ícone do WhatsApp no botão', 'lt-bottom-cta' ),
+				'type'     => 'checkbox',
+				'sanitize' => 'none',
+			],
+			[
 				'id'       => 'lt_mb_bottom_cta_below_text',
 				'label'    => __( 'Texto abaixo do botão (opcional)', 'lt-bottom-cta' ),
 				'type'     => 'text',
