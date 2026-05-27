@@ -309,6 +309,17 @@ final class LT_Bottom_CTA_Frontend
 		 * Ex.: 30 => só mostra quando o marcador já passou 30px acima do topo.
 		 */
 		$trigger_offset_px = max(0, (int) apply_filters('lt_bottom_cta_trigger_offset_px', 30));
+		/**
+		 * Seletores de elementos que o CTA NUNCA pode cobrir (anúncios). Quando a barra
+		 * fixa sobrepõe qualquer um deles, ela fica transparente — o anúncio sempre vence.
+		 * Padrão cobre topo do tema, Ad Inserter (.code-block) e AdSense (ins.adsbygoogle).
+		 *
+		 * @example add_filter( 'lt_bottom_cta_overlap_selectors', fn () => '.code-block, .meu-anuncio' );
+		 */
+		$overlap_selectors = (string) apply_filters(
+			'lt_bottom_cta_overlap_selectors',
+			'#av_top_wrapper, #av_top, .ad_container, .code-block, ins.adsbygoogle'
+		);
 		?>
 		<div class="lt-bottom-cta" data-lt-bottom-cta hidden>
 			<div class="lt-bottom-cta__inner">
@@ -375,7 +386,7 @@ final class LT_Bottom_CTA_Frontend
 					setPadding(0);
 				};
 
-				var overlapSelectors = '#av_top_wrapper, #av_top, .ad_container';
+				var overlapSelectors = <?php echo wp_json_encode($overlap_selectors); ?>;
 				var overlaps = function (a, b) {
 					return !(a.right <= b.left || a.left >= b.right || a.bottom <= b.top || a.top >= b.bottom);
 				};
