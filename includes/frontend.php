@@ -335,14 +335,6 @@ final class LT_Bottom_CTA_Frontend
 		 * @example add_filter( 'lt_bottom_cta_trigger_after_paragraph', fn () => 5 );
 		 */
 		$trigger_after_paragraph = max(0, (int) apply_filters('lt_bottom_cta_trigger_after_paragraph', 3));
-		/**
-		 * Seletor do contêiner cujo Nº-ésimo <p> direto vira o gatilho fallback.
-		 * Usa o primeiro contêiner que tiver pelo menos N parágrafos diretos.
-		 */
-		$content_selector = (string) apply_filters(
-			'lt_bottom_cta_content_selector',
-			'.singular__entry, .entry-content, .post-content, article'
-		);
 		?>
 		<div class="lt-bottom-cta" data-lt-bottom-cta hidden>
 			<div class="lt-bottom-cta__inner">
@@ -384,7 +376,6 @@ final class LT_Bottom_CTA_Frontend
 				var fallbackWithoutTrigger = <?php echo $fallback_without_trigger ? 'true' : 'false'; ?>;
 				var triggerOffsetPx = <?php echo (int) $trigger_offset_px; ?>;
 				var triggerAfterParagraph = <?php echo (int) $trigger_after_paragraph; ?>;
-				var contentSelector = <?php echo wp_json_encode($content_selector); ?>;
 
 				var queryTrigger = function () {
 					// 1) Marcador explícito (Block 80, manual, etc.)
@@ -393,22 +384,13 @@ final class LT_Bottom_CTA_Frontend
 						if (m) return m;
 					} catch (e) { /* seletor inválido */ }
 
-					// 2) Fallback: Nº-ésimo <p> direto do contêiner do conteúdo
+					// 2) Fallback: Nº-ésimo <p> da página
 					//    (resolve casos onde o marcador some por minificação de HTML)
-					if (triggerAfterParagraph > 0 && contentSelector) {
-						try {
-							var containers = document.querySelectorAll(contentSelector);
-							for (var ci = 0; ci < containers.length; ci++) {
-								var kids = containers[ci].children;
-								var ps = [];
-								for (var i = 0; i < kids.length; i++) {
-									if (kids[i].tagName === 'P') ps.push(kids[i]);
-								}
-								if (ps.length >= triggerAfterParagraph) {
-									return ps[triggerAfterParagraph - 1];
-								}
-							}
-						} catch (e) { /* ignora */ }
+					if (triggerAfterParagraph > 0) {
+						var allP = document.querySelectorAll('p');
+						if (allP.length >= triggerAfterParagraph) {
+							return allP[triggerAfterParagraph - 1];
+						}
 					}
 
 					return null;
