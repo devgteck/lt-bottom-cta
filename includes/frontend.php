@@ -48,8 +48,21 @@ final class LT_Bottom_CTA_Frontend
 		$id = preg_replace('/[^a-zA-Z0-9_-]/', '', $id);
 		$slug = $id !== '' ? $id : 'botao_wpp';
 
-		// Aceita marcador como id OU classe sem precisar de filtro (ex.: `<div class="botao_wpp">`).
-		return '#' . $slug . ', .' . $slug;
+		/**
+		 * Número do bloco do Ad Inserter usado como marcador (convenção GTeck: 80).
+		 * O wrapper `.code-block-N` que o Ad Inserter gera sobrevive mesmo quando o
+		 * conteúdo interno vazio é stripado por minificadores de HTML — então usar
+		 * o wrapper é mais robusto do que confiar no <div class="botao_wpp"></div>
+		 * dentro dele. 0 = não incluir wrapper do Ad Inserter no seletor.
+		 */
+		$ai_block = absint(apply_filters('lt_bottom_cta_ad_inserter_block', 80));
+
+		// Aceita marcador como id, classe, OU o wrapper do bloco do Ad Inserter.
+		$sel = '#' . $slug . ', .' . $slug;
+		if ($ai_block > 0) {
+			$sel .= ', .code-block-' . $ai_block;
+		}
+		return $sel;
 	}
 
 	private static function sanitize_trigger_selector(string $sel): string
