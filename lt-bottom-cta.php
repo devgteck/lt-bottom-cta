@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Botão Fixo
  * Description: CTA fixo no rodapé para posts e páginas (metabox + render no frontend).
- * Version: 2.2.0
+ * Version: 2.2.1
  * Author: Danilo Brandão
  * Requires at least: 5.8
  * Requires PHP: 7.4
@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-define('LT_BOTTOM_CTA_VERSION', '2.2.0');
+define('LT_BOTTOM_CTA_VERSION', '2.2.1');
 define('LT_BOTTOM_CTA_DIR', __DIR__);
 define('LT_BOTTOM_CTA_URL', plugin_dir_url(__FILE__));
 

@@ -123,8 +123,9 @@ final class LT_Bottom_CTA_Frontend
 			}
 
 			[data-lt-bottom-cta].lt-bottom-cta--transparent {
+				visibility: hidden !important;
 				opacity: 0 !important;
-				pointer-events: none;
+				pointer-events: none !important;
 			}
 
 			[data-lt-bottom-cta][hidden] {
@@ -311,15 +312,20 @@ final class LT_Bottom_CTA_Frontend
 		$trigger_offset_px = max(0, (int) apply_filters('lt_bottom_cta_trigger_offset_px', 30));
 		/**
 		 * Seletores de elementos que o CTA NUNCA pode cobrir (anúncios). Quando a barra
-		 * fixa sobrepõe qualquer um deles, ela fica transparente — o anúncio sempre vence.
-		 * Padrão cobre topo do tema, Ad Inserter (.code-block) e AdSense (ins.adsbygoogle).
+		 * sobrepõe qualquer um deles, ela é escondida (visibility: hidden) — o anúncio
+		 * sempre vence. Política de redes de anúncio: cobrir anúncio pode banir o site.
 		 *
-		 * @example add_filter( 'lt_bottom_cta_overlap_selectors', fn () => '.code-block, .meu-anuncio' );
+		 * Os seletores em MANDATORY_OVERLAP_SELECTORS são SEMPRE protegidos — o filtro
+		 * só pode ADICIONAR seletores extras, nunca remover esses.
+		 *
+		 * @example add_filter( 'lt_bottom_cta_overlap_selectors', fn () => '.meu-anuncio' );
 		 */
-		$overlap_selectors = (string) apply_filters(
+		$mandatory = '#av_top_wrapper, #av_top, .ad_container';
+		$extras    = (string) apply_filters(
 			'lt_bottom_cta_overlap_selectors',
-			'#av_top_wrapper, #av_top, .ad_container, .code-block, ins.adsbygoogle'
+			'.code-block, ins.adsbygoogle'
 		);
+		$overlap_selectors = $mandatory . ($extras !== '' ? ', ' . $extras : '');
 		?>
 		<div class="lt-bottom-cta" data-lt-bottom-cta hidden>
 			<div class="lt-bottom-cta__inner">
