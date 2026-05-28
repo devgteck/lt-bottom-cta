@@ -145,6 +145,18 @@ final class LT_Bottom_CTA_Frontend
 				display: none !important;
 			}
 
+			/*
+			 * Sites com snippet/plugin legado que também renderiza .lt-bottom-cta
+			 * acabavam com DUAS barras no rodapé (a nossa, gerenciada pelo trigger,
+			 * e a legada, sempre visível). Esta regra esconde QUALQUER duplicata
+			 * que apareça depois da primeira instância (o nosso CTA é renderizado
+			 * primeiro via wp_footer priority 30).
+			 */
+			[data-lt-bottom-cta] ~ [data-lt-bottom-cta],
+			.lt-bottom-cta ~ .lt-bottom-cta {
+				display: none !important;
+			}
+
 			.lt-bottom-cta__inner {
 				max-width: var(--lt-content-max-width, 1100px);
 				margin: 0 auto;
